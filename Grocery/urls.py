@@ -1,4 +1,4 @@
-"""Gracery URL Configuration
+"""Grocery URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -14,8 +14,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.schemas import get_schema_view
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('Grocery/', include('Groceryapp.urls')),
+    path('openapi/', get_schema_view(
+        title="Grocery",
+        description="API developers Grocery to use our service"
+    ), name='openapi-schema'),
+    path('', TemplateView.as_view(
+        template_name='index.html',
+        extra_context={'schema_url': 'openapi-schema'}
+    ), name='swagger-ui'),
 ]
